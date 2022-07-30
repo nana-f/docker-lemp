@@ -23,17 +23,6 @@ git push
 ##### ※ 指定のブランチへプッシュ
 git push -u origin {BranchName}
 #
-## 主なコマンドdocker
-docker compose up
-
-docker-compose start
-
-docker-compose stop
-
-docker compose exec app bash
-
-php artisan migrate
-#
 ## LEMP環境構築手順
 ##### (SHA-1:ac70891e03f460652498451ebc2dc6857f58c502)
 #### ※ powershellにて作業
