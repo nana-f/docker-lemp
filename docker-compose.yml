@@ -1,0 +1,48 @@
+version: '3.8'
+ 
+volumes:
+  mysql-volume:
+ 
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - ${IP}:${HTTP_PORT}:80
+    volumes:
+      - ./src/:/var/www/html
+  php:
+    build:
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    volumes:
+      - ./src/:/var/www/html
+  db:
+    image: mysql
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    volumes:
+      - mysql-volume:/var/lib/mysql
+    ports:
+      - ${IP}:3306:3306
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_ROOT_PASSWORD=${ROOT_PASSWORD}
+      - MYSQL_USER=${USER_NAME}
+      - MYSQL_PASSWORD=${USER_PASSWORD}
+      - TZ=Asia/Tokyo
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    depends_on:
+      - db
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOSTS=db
+      - PMA_USER=${USER_NAME}
+      - PMA_PASSWORD=${USER_PASSWORD}
+    ports:
+      - "${IP}:3000:80"
+    volumes:
+      - ./docker/phpmyadmin/sessions:/sessions
